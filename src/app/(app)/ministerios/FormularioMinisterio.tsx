@@ -80,7 +80,7 @@ export function FormularioMinisterio({ modo, id, membros, inicial }: Props) {
     <form onSubmit={handleSubmit(aoSubmeter)} className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Dados do ministério</CardTitle>
+          <CardTitle>Dados do departamento</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div>
@@ -113,7 +113,7 @@ export function FormularioMinisterio({ modo, id, membros, inicial }: Props) {
           </div>
           <label className="flex items-center gap-2 text-sm">
             <input type="checkbox" className="size-4 rounded border-input" {...register("activo")} />
-            Ministério activo
+            Departamento activo
           </label>
         </CardContent>
       </Card>
@@ -129,7 +129,7 @@ export function FormularioMinisterio({ modo, id, membros, inicial }: Props) {
           {isSubmitting
             ? "A guardar…"
             : modo === "criar"
-              ? "Criar ministério"
+              ? "Criar departamento"
               : "Guardar alterações"}
         </Button>
         <Button type="button" variant="outline" onClick={() => router.back()}>

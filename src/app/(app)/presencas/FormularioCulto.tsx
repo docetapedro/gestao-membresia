@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
@@ -12,6 +12,7 @@ import type { CriarCultoInput, ActualizarCultoInput } from "@/lib/validators/cul
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SelectNativo } from "@/components/ui/select-nativo";
+import { DateTimePicker } from "@/components/ui/date-picker";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -60,6 +61,7 @@ export function FormularioCulto({ modo, id, inicial }: Props) {
 
   const {
     register,
+    control,
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
@@ -109,7 +111,13 @@ export function FormularioCulto({ modo, id, inicial }: Props) {
             </SelectNativo>
           </Campo>
           <Campo label="Data e hora *" htmlFor="data" erro={errors.data?.message}>
-            <Input id="data" type="datetime-local" {...register("data")} />
+            <Controller
+              control={control}
+              name="data"
+              render={({ field }) => (
+                <DateTimePicker id="data" value={field.value} onChange={field.onChange} />
+              )}
+            />
           </Campo>
           <Campo label="Tema" htmlFor="tema" className="sm:col-span-2">
             <Input id="tema" {...register("tema")} />

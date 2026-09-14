@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
@@ -30,6 +30,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { SelectNativo } from "@/components/ui/select-nativo";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -115,6 +116,7 @@ export function FormularioMembro({ opcoes, modo, id, inicial }: Props) {
 
   const {
     register,
+    control,
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
@@ -171,7 +173,13 @@ export function FormularioMembro({ opcoes, modo, id, inicial }: Props) {
             </SelectNativo>
           </Campo>
           <Campo label="Data de nascimento" htmlFor="dataNascimento">
-            <Input id="dataNascimento" type="date" {...register("dataNascimento")} />
+            <Controller
+              control={control}
+              name="dataNascimento"
+              render={({ field }) => (
+                <DatePicker id="dataNascimento" value={field.value} onChange={field.onChange} />
+              )}
+            />
           </Campo>
           <Campo label="Estado civil" htmlFor="estadoCivil">
             <SelectNativo id="estadoCivil" {...register("estadoCivil")}>
@@ -250,13 +258,31 @@ export function FormularioMembro({ opcoes, modo, id, inicial }: Props) {
             </SelectNativo>
           </Campo>
           <Campo label="Data de conversão" htmlFor="dataConversao">
-            <Input id="dataConversao" type="date" {...register("dataConversao")} />
+            <Controller
+              control={control}
+              name="dataConversao"
+              render={({ field }) => (
+                <DatePicker id="dataConversao" value={field.value} onChange={field.onChange} />
+              )}
+            />
           </Campo>
           <Campo label="Data de admissão" htmlFor="dataAdmissao">
-            <Input id="dataAdmissao" type="date" {...register("dataAdmissao")} />
+            <Controller
+              control={control}
+              name="dataAdmissao"
+              render={({ field }) => (
+                <DatePicker id="dataAdmissao" value={field.value} onChange={field.onChange} />
+              )}
+            />
           </Campo>
           <Campo label="Data de baptismo" htmlFor="dataBaptismo">
-            <Input id="dataBaptismo" type="date" {...register("dataBaptismo")} />
+            <Controller
+              control={control}
+              name="dataBaptismo"
+              render={({ field }) => (
+                <DatePicker id="dataBaptismo" value={field.value} onChange={field.onChange} />
+              )}
+            />
           </Campo>
           <Campo label="Local do baptismo" htmlFor="localBaptismo">
             <Input id="localBaptismo" {...register("localBaptismo")} />

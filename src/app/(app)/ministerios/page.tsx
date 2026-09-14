@@ -7,7 +7,7 @@ import { filtrosMinisterioSchema } from "@/lib/validators/ministerios";
 import { Button } from "@/components/ui/button";
 import { ListaMinisterios } from "./ListaMinisterios";
 
-export const metadata = { title: "Ministérios" };
+export const metadata = { title: "Departamentos" };
 
 export default async function MinisteriosPage({
   searchParams,
@@ -27,7 +27,7 @@ export default async function MinisteriosPage({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Ministérios</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Departamentos</h1>
           <p className="text-sm text-muted-foreground">
             Áreas de serviço e membros que nelas servem.
           </p>
@@ -36,7 +36,7 @@ export default async function MinisteriosPage({
           <Button asChild>
             <Link href="/ministerios/novo">
               <Plus className="size-4" />
-              Novo ministério
+              Novo departamento
             </Link>
           </Button>
         ) : null}

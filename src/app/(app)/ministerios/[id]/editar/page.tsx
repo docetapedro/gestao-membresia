@@ -4,7 +4,7 @@ import { can, restringeACelula } from "@/lib/auth/permissoes";
 import { obterMinisterio, membrosParaResponsavel } from "@/services/ministerios.service";
 import { FormularioMinisterio } from "../../FormularioMinisterio";
 
-export const metadata = { title: "Editar ministério" };
+export const metadata = { title: "Editar departamento" };
 
 export default async function EditarMinisterioPage({
   params,
@@ -33,7 +33,7 @@ export default async function EditarMinisterioPage({
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Editar ministério</h1>
+        <h1 className="text-2xl font-bold tracking-tight">Editar departamento</h1>
         <p className="text-sm text-muted-foreground">{ministerio.nome}</p>
       </div>
       <FormularioMinisterio modo="editar" id={ministerio.id} membros={membros} inicial={inicial} />

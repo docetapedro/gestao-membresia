@@ -166,7 +166,7 @@ export async function actualizarMinisterio(
   const { id, ...dados } = actualizarMinisterioSchema.parse(input);
 
   const antes = await db.ministerio.findFirst({ where: { id } });
-  if (!antes) throw new ErroDeNegocio("Ministério não encontrado.");
+  if (!antes) throw new ErroDeNegocio("Departamento não encontrado.");
 
   const [, actualizado] = await db.$transaction([
     db.ministerio.updateMany({ where: { id }, data: dados }),
@@ -190,12 +190,12 @@ export async function removerMinisterio(ctx: TenantContext, input: RemoverMinist
   const { id } = removerMinisterioSchema.parse(input);
 
   const antes = await db.ministerio.findFirst({ where: { id } });
-  if (!antes) throw new ErroDeNegocio("Ministério não encontrado.");
+  if (!antes) throw new ErroDeNegocio("Departamento não encontrado.");
 
   const membros = await db.membroMinisterio.count({ where: { ministerioId: id } });
   if (membros > 0) {
     throw new ErroDeNegocio(
-      "O ministério tem membros associados. Retire-os antes de o eliminar.",
+      "O departamento tem membros associados. Retire-os antes de o eliminar.",
     );
   }
 
@@ -219,7 +219,7 @@ export async function atribuirMembroMinisterio(
   const { ministerioId, membroId, funcao, desde } = atribuirMembroMinisterioSchema.parse(input);
 
   const ministerio = await db.ministerio.findFirst({ where: { id: ministerioId } });
-  if (!ministerio) throw new ErroDeNegocio("Ministério não encontrado.");
+  if (!ministerio) throw new ErroDeNegocio("Departamento não encontrado.");
 
   const membro = await db.membro.findFirst({ where: { id: membroId } });
   if (!membro) throw new ErroDeNegocio("Membro não encontrado.");
@@ -227,7 +227,7 @@ export async function atribuirMembroMinisterio(
   const existente = await db.membroMinisterio.findFirst({
     where: { ministerioId, membroId },
   });
-  if (existente) throw new ErroDeNegocio("O membro já pertence a este ministério.");
+  if (existente) throw new ErroDeNegocio("O membro já pertence a este departamento.");
 
   const criado = await db.membroMinisterio.create({
     data: { igrejaId: ctx.igrejaId, ministerioId, membroId, funcao, desde },

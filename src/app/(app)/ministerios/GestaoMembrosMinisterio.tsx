@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SelectNativo } from "@/components/ui/select-nativo";
+import { DatePicker } from "@/components/ui/date-picker";
 
 interface Associacao {
   id: string;
@@ -81,7 +82,7 @@ export function GestaoMembrosMinisterio({
     <div className="space-y-4">
       {associacoes.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          Ainda não há membros neste ministério.
+          Ainda não há membros neste departamento.
         </p>
       ) : (
         <ul className="divide-y rounded-lg border bg-card">
@@ -103,7 +104,7 @@ export function GestaoMembrosMinisterio({
                   size="icon"
                   onClick={() => retirar(a.id)}
                   disabled={pendente}
-                  title="Retirar do ministério"
+                  title="Retirar do departamento"
                 >
                   <X className="size-4" />
                 </Button>
@@ -118,7 +119,7 @@ export function GestaoMembrosMinisterio({
           <p className="mb-3 text-sm font-medium">Adicionar membro</p>
           {disponiveis.length === 0 ? (
             <p className="text-xs text-muted-foreground">
-              Todos os membros já pertencem a este ministério.
+              Todos os membros já pertencem a este departamento.
             </p>
           ) : (
             <div className="grid gap-3 sm:grid-cols-2">
@@ -143,7 +144,7 @@ export function GestaoMembrosMinisterio({
               </div>
               <div>
                 <Label className="mb-1.5 block">Desde</Label>
-                <Input type="date" value={desde} onChange={(e) => setDesde(e.target.value)} />
+                <DatePicker value={desde} onChange={setDesde} />
               </div>
               <div className="sm:col-span-2">
                 <Button onClick={adicionar} disabled={pendente || !membroId}>

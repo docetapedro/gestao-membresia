@@ -4,7 +4,7 @@ import { can, restringeACelula } from "@/lib/auth/permissoes";
 import { membrosParaResponsavel } from "@/services/ministerios.service";
 import { FormularioMinisterio } from "../FormularioMinisterio";
 
-export const metadata = { title: "Novo ministério" };
+export const metadata = { title: "Novo departamento" };
 
 export default async function NovoMinisterioPage() {
   const ctx = await getTenantContext();
@@ -17,9 +17,9 @@ export default async function NovoMinisterioPage() {
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Novo ministério</h1>
+        <h1 className="text-2xl font-bold tracking-tight">Novo departamento</h1>
         <p className="text-sm text-muted-foreground">
-          Crie o ministério e depois associe-lhe membros.
+          Crie o departamento e depois associe-lhe membros.
         </p>
       </div>
       <FormularioMinisterio modo="criar" membros={membros} />

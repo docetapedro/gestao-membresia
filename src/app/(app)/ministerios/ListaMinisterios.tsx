@@ -81,7 +81,7 @@ export function ListaMinisterios({
             {dados.itens.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={3} className="h-24 text-center text-muted-foreground">
-                  Nenhum ministério encontrado.
+                  Nenhum departamento encontrado.
                 </TableCell>
               </TableRow>
             ) : (
@@ -107,7 +107,7 @@ export function ListaMinisterios({
 
       <div className="flex items-center justify-between text-sm text-muted-foreground">
         <span>
-          {dados.total} ministério{dados.total === 1 ? "" : "s"} · página {dados.page} de{" "}
+          {dados.total} departamento{dados.total === 1 ? "" : "s"} · página {dados.page} de{" "}
           {dados.totalPaginas}
         </span>
         <div className="flex gap-2">

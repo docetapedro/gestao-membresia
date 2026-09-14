@@ -26,7 +26,7 @@ export const NAVEGACAO: ItemNav[] = [
   { href: "/membros", rotulo: "Membros", icone: Users, recurso: "membros" },
   { href: "/familias", rotulo: "Famílias", icone: Home, recurso: "membros" },
   { href: "/celulas", rotulo: "Células", icone: Network, recurso: "membros" },
-  { href: "/ministerios", rotulo: "Ministérios", icone: HandHeart, recurso: "membros" },
+  { href: "/ministerios", rotulo: "Departamentos", icone: HandHeart, recurso: "membros" },
   { href: "/presencas", rotulo: "Presenças", icone: CalendarCheck, recurso: "presencas" },
   { href: "/contribuicoes", rotulo: "Contribuições", icone: Wallet, recurso: "contribuicoes" },
   { href: "/eventos", rotulo: "Eventos", icone: CalendarDays, recurso: "membros" },

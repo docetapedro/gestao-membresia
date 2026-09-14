@@ -67,7 +67,7 @@ export default async function MinisterioDetalhePage({
 
       <Card>
         <CardHeader>
-          <CardTitle>Membros do ministério</CardTitle>
+          <CardTitle>Membros do departamento</CardTitle>
         </CardHeader>
         <CardContent>
           <GestaoMembrosMinisterio
