@@ -14,6 +14,7 @@
     "db:push": "node scripts/prisma-provider.mjs && prisma db push",
     "db:studio": "node scripts/prisma-provider.mjs && prisma studio",
     "db:seed": "node scripts/prisma-provider.mjs && tsx prisma/seed.ts",
+    "db:repor-admin": "node scripts/prisma-provider.mjs && tsx prisma/repor-admin.ts",
     "db:generate": "node scripts/prisma-provider.mjs && prisma generate",
     "test": "vitest run",
     "test:watch": "vitest",
