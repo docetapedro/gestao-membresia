@@ -8,6 +8,7 @@ import {
   actualizarMembro,
   removerMembro,
 } from "@/services/membros.service";
+import { guardarFotoMembro, removerFotoMembro } from "@/services/fotos.service";
 import type {
   CriarMembroInput,
   ActualizarMembroInput,
@@ -48,6 +49,42 @@ export async function removerMembroAction(
     const ctx = await getTenantContext();
     const r = await removerMembro(ctx, input);
     revalidatePath("/membros");
+    return sucesso(r);
+  } catch (e) {
+    return falhaDeErro(e);
+  }
+}
+
+export async function carregarFotoAction(
+  membroId: string,
+  formData: FormData,
+): Promise<Resultado<{ fotoUrl: string }>> {
+  try {
+    const ctx = await getTenantContext();
+    const ficheiro = formData.get("foto");
+    if (!(ficheiro instanceof File) || ficheiro.size === 0) {
+      return { ok: false, erro: "Nenhum ficheiro seleccionado." };
+    }
+    const buffer = Buffer.from(await ficheiro.arrayBuffer());
+    const r = await guardarFotoMembro(ctx, membroId, {
+      buffer,
+      mime: ficheiro.type,
+      tamanho: ficheiro.size,
+    });
+    revalidatePath(`/membros/${membroId}`);
+    return sucesso(r);
+  } catch (e) {
+    return falhaDeErro(e);
+  }
+}
+
+export async function removerFotoAction(
+  membroId: string,
+): Promise<Resultado<{ fotoUrl: null }>> {
+  try {
+    const ctx = await getTenantContext();
+    const r = await removerFotoMembro(ctx, membroId);
+    revalidatePath(`/membros/${membroId}`);
     return sucesso(r);
   } catch (e) {
     return falhaDeErro(e);

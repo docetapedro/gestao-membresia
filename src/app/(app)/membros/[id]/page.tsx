@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RemoverMembro } from "./RemoverMembro";
+import { FotoMembroAvatar } from "./FotoMembroAvatar";
 
 function Linha({ rotulo, valor }: { rotulo: string; valor: React.ReactNode }) {
   return (
@@ -45,10 +46,16 @@ export default async function MembroDetalhePage({
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <div className="flex items-start justify-between gap-4">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <Button asChild variant="ghost" size="icon">
             <Link href="/membros"><ArrowLeft className="size-4" /></Link>
           </Button>
+          <FotoMembroAvatar
+            membroId={m.id}
+            nome={m.nomeCompleto}
+            fotoUrl={m.fotoUrl}
+            podeEditar={podeEditar}
+          />
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-bold tracking-tight">{m.nomeCompleto}</h1>

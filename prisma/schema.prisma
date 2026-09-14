@@ -162,12 +162,27 @@ model Membro {
   presencas      Presenca[]
   contribuicoes  Contribuicao[]
   contaUtilizador Utilizador?
+  foto           FotoMembro?
 
   @@unique([igrejaId, numeroMembro])
   @@index([igrejaId, nomeCompleto])
   @@index([igrejaId, estado])
   @@index([igrejaId, familiaId])
   @@index([igrejaId, celulaId])
+}
+
+model FotoMembro {
+  id            String   @id @default(cuid())
+  igrejaId      String
+  membroId      String   @unique
+  dados         Bytes // imagem já redimensionada (webp)
+  mime          String
+  criadoEm      DateTime @default(now())
+  actualizadoEm DateTime @updatedAt
+
+  membro Membro @relation(fields: [membroId], references: [id], onDelete: Cascade)
+
+  @@index([igrejaId])
 }
 
 model Familia {
