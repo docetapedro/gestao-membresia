@@ -18,7 +18,8 @@ Zod · MySQL (dev) / PostgreSQL (produção).
    cp .env.example .env
    ```
    O `.env` já vem apontado para o MySQL local do XAMPP
-   (`mysql://root:@127.0.0.1:3306/gestao_membresia`). Ajuste se necessário.
+   (`mysql://root:@127.0.0.1:3307/gestao_membresia`). Ajuste a porta se necessário
+   (o XAMPP usa 3306 por omissão, mas pode estar em 3307).
 3. Instalar dependências e criar o esquema:
    ```bash
    npm install

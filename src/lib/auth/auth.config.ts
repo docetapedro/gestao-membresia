@@ -10,6 +10,9 @@ import type { NextAuthConfig } from "next-auth";
  * Sessão em base de dados fica para fase futura, se necessária.
  */
 export const authConfig = {
+  // Confia no host do pedido — em dev a porta pode variar (3000/3002/…);
+  // em produção definir AUTH_URL na Vercel.
+  trustHost: true,
   pages: {
     signIn: "/login",
   },
