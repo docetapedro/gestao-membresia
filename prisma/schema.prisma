@@ -1,0 +1,357 @@
+// Schema Prisma — Sistema de Gestão de Membros (Koinonia)
+// O `provider` é definido automaticamente por scripts/prisma-provider.mjs
+// a partir do DATABASE_URL (mysql local / postgresql em produção).
+// Tipos escolhidos para serem portáveis entre MySQL e PostgreSQL.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────────────────────
+// Enums
+// ─────────────────────────────────────────────────────────────
+
+enum Sexo {
+  MASCULINO
+  FEMININO
+}
+
+enum EstadoCivil {
+  SOLTEIRO
+  CASADO
+  DIVORCIADO
+  VIUVO
+  UNIAO_DE_FACTO
+}
+
+enum TipoDocumento {
+  BI
+  PASSAPORTE
+  CARTAO_RESIDENTE
+}
+
+enum EstadoMembro {
+  VISITANTE
+  EM_ACOMPANHAMENTO
+  MEMBRO
+  INACTIVO
+  TRANSFERIDO
+  FALECIDO
+}
+
+enum FormaAdmissao {
+  BAPTISMO
+  TRANSFERENCIA
+  RECONCILIACAO
+}
+
+enum PapelFamiliar {
+  CHEFE
+  CONJUGE
+  FILHO
+  DEPENDENTE
+  OUTRO
+}
+
+enum TipoCulto {
+  DOMINGO_MANHA
+  ORACAO
+  CELULA
+  ESPECIAL
+}
+
+enum TipoContribuicao {
+  DIZIMO
+  OFERTA
+  VOTO
+  MISSOES
+  CONSTRUCAO
+  OUTRO
+}
+
+enum MetodoPagamento {
+  NUMERARIO
+  TPA
+  TRANSFERENCIA
+  MULTICAIXA_EXPRESS
+}
+
+enum Papel {
+  ADMIN
+  PASTOR
+  SECRETARIA
+  TESOURARIA
+  LIDER_CELULA
+}
+
+// ─────────────────────────────────────────────────────────────
+// Tenant raiz
+// ─────────────────────────────────────────────────────────────
+
+model Igreja {
+  id          String   @id @default(cuid())
+  nome        String
+  denominacao String?
+  nif         String?
+  provincia   String?
+  municipio   String?
+  endereco    String?  @db.Text
+  telefone    String?
+  email       String?
+  logoUrl     String?
+  moeda       String   @default("AOA")
+  criadoEm    DateTime @default(now())
+}
+
+// ─────────────────────────────────────────────────────────────
+// Membros e estrutura familiar
+// ─────────────────────────────────────────────────────────────
+
+model Membro {
+  id              String         @id @default(cuid())
+  igrejaId        String
+  numeroMembro    String // sequencial por igreja
+  nomeCompleto    String
+  nomePreferido   String?
+  sexo            Sexo
+  dataNascimento  DateTime?
+  estadoCivil     EstadoCivil?
+  documentoTipo   TipoDocumento?
+  documentoNumero String?
+  telefone        String?
+  telefoneAlt     String?
+  email           String?
+  provincia       String?
+  municipio       String?
+  bairro          String?
+  endereco        String?        @db.Text
+  profissao       String?
+  fotoUrl         String?
+
+  // vida eclesial
+  estado        EstadoMembro
+  dataConversao DateTime?
+  dataBaptismo  DateTime?
+  localBaptismo String?
+  dataAdmissao  DateTime?
+  formaAdmissao FormaAdmissao?
+  igrejaOrigem  String?
+  dataSaida     DateTime?
+  motivoSaida   String?        @db.Text
+
+  // protecção de dados (Lei 22/11)
+  consentimentoDados   Boolean   @default(false)
+  consentimentoDataHora DateTime?
+
+  familiaId     String?
+  papelFamiliar PapelFamiliar?
+  celulaId      String?
+  observacoes   String?        @db.Text
+
+  criadoEm      DateTime @default(now())
+  actualizadoEm DateTime @updatedAt
+
+  familia        Familia?           @relation(fields: [familiaId], references: [id])
+  celula         Celula?            @relation(fields: [celulaId], references: [id])
+  ministerios    MembroMinisterio[]
+  presencas      Presenca[]
+  contribuicoes  Contribuicao[]
+  contaUtilizador Utilizador?
+
+  @@unique([igrejaId, numeroMembro])
+  @@index([igrejaId, nomeCompleto])
+  @@index([igrejaId, estado])
+  @@index([igrejaId, familiaId])
+  @@index([igrejaId, celulaId])
+}
+
+model Familia {
+  id       String   @id @default(cuid())
+  igrejaId String
+  nome     String
+  endereco String?  @db.Text
+  membros  Membro[]
+
+  @@index([igrejaId])
+}
+
+model Celula {
+  id          String   @id @default(cuid())
+  igrejaId    String
+  nome        String
+  liderId     String? // Membro
+  anfitriaoId String? // Membro
+  diaSemana   Int?
+  hora        String?
+  endereco    String?  @db.Text
+  activa      Boolean  @default(true)
+  membros     Membro[]
+
+  @@index([igrejaId])
+}
+
+model Ministerio {
+  id        String             @id @default(cuid())
+  igrejaId  String
+  nome      String
+  descricao String?            @db.Text
+  liderId   String? // Membro
+  activo    Boolean            @default(true)
+  membros   MembroMinisterio[]
+
+  @@index([igrejaId])
+}
+
+model MembroMinisterio {
+  id           String    @id @default(cuid())
+  igrejaId     String
+  membroId     String
+  ministerioId String
+  funcao       String?
+  desde        DateTime?
+  ate          DateTime?
+
+  membro     Membro     @relation(fields: [membroId], references: [id])
+  ministerio Ministerio @relation(fields: [ministerioId], references: [id])
+
+  @@unique([igrejaId, membroId, ministerioId, desde])
+  @@index([igrejaId, membroId])
+  @@index([igrejaId, ministerioId])
+}
+
+// ─────────────────────────────────────────────────────────────
+// Cultos e presenças
+// ─────────────────────────────────────────────────────────────
+
+model Culto {
+  id        String     @id @default(cuid())
+  igrejaId  String
+  tipo      TipoCulto
+  data      DateTime
+  tema      String?
+  pregador  String?
+  presencas Presenca[]
+
+  @@index([igrejaId, data])
+}
+
+model Presenca {
+  id       String  @id @default(cuid())
+  igrejaId String
+  cultoId  String
+  membroId String
+  presente Boolean @default(true)
+
+  culto  Culto  @relation(fields: [cultoId], references: [id], onDelete: Cascade)
+  membro Membro @relation(fields: [membroId], references: [id])
+
+  @@unique([igrejaId, cultoId, membroId])
+  @@index([igrejaId, membroId])
+}
+
+// ─────────────────────────────────────────────────────────────
+// Contribuições
+// ─────────────────────────────────────────────────────────────
+
+model Contribuicao {
+  id             String           @id @default(cuid())
+  igrejaId       String
+  membroId       String? // nulo = oferta anónima
+  tipo           TipoContribuicao
+  valor          Decimal          @db.Decimal(14, 2)
+  moeda          String           @default("AOA")
+  metodo         MetodoPagamento
+  data           DateTime
+  referencia     String?
+  cultoId        String?
+  registadoPorId String
+  anulada        Boolean          @default(false)
+  motivoAnulacao String?          @db.Text
+  criadoEm       DateTime         @default(now())
+
+  membro       Membro?    @relation(fields: [membroId], references: [id])
+  registadoPor Utilizador @relation(fields: [registadoPorId], references: [id])
+
+  @@index([igrejaId, data])
+  @@index([igrejaId, membroId])
+  @@index([igrejaId, tipo])
+}
+
+// ─────────────────────────────────────────────────────────────
+// Eventos
+// ─────────────────────────────────────────────────────────────
+
+model Evento {
+  id        String    @id @default(cuid())
+  igrejaId  String
+  nome      String
+  inicio    DateTime
+  fim       DateTime?
+  local     String?
+  descricao String?   @db.Text
+
+  @@index([igrejaId, inicio])
+}
+
+// ─────────────────────────────────────────────────────────────
+// Utilizadores, auth e auditoria
+// ─────────────────────────────────────────────────────────────
+
+model Utilizador {
+  id        String  @id @default(cuid())
+  igrejaId  String
+  nome      String
+  email     String
+  hashSenha String
+  papel     Papel
+  activo    Boolean @default(true)
+  membroId  String? @unique
+
+  criadoEm      DateTime @default(now())
+  actualizadoEm DateTime @updatedAt
+
+  membro                 Membro?                @relation(fields: [membroId], references: [id])
+  contribuicoesRegistadas Contribuicao[]
+  logs                   LogAuditoria[]
+  tokensRecuperacao      TokenRecuperacaoSenha[]
+
+  @@unique([igrejaId, email])
+  @@index([igrejaId])
+}
+
+model TokenRecuperacaoSenha {
+  id           String   @id @default(cuid())
+  igrejaId     String
+  utilizadorId String
+  tokenHash    String   @unique
+  expiraEm     DateTime
+  usadoEm      DateTime?
+  criadoEm     DateTime @default(now())
+
+  utilizador Utilizador @relation(fields: [utilizadorId], references: [id], onDelete: Cascade)
+
+  @@index([igrejaId, utilizadorId])
+}
+
+model LogAuditoria {
+  id           String   @id @default(cuid())
+  igrejaId     String
+  utilizadorId String
+  accao        String // CRIAR, ACTUALIZAR, ELIMINAR, ANULAR
+  entidade     String
+  entidadeId   String
+  dadosAntes   Json?
+  dadosDepois  Json?
+  ip           String?
+  criadoEm     DateTime @default(now())
+
+  utilizador Utilizador @relation(fields: [utilizadorId], references: [id])
+
+  @@index([igrejaId, criadoEm])
+  @@index([igrejaId, entidade, entidadeId])
+}
