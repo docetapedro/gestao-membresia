@@ -6,6 +6,8 @@ import type {
   FormaAdmissao,
   PapelFamiliar,
   TipoCulto,
+  TipoContribuicao,
+  MetodoPagamento,
   Papel,
 } from "@prisma/client";
 
@@ -14,6 +16,22 @@ export const TIPO_CULTO: Record<TipoCulto, string> = {
   ORACAO: "Culto de oração",
   CELULA: "Célula",
   ESPECIAL: "Especial",
+};
+
+export const TIPO_CONTRIBUICAO: Record<TipoContribuicao, string> = {
+  DIZIMO: "Dízimo",
+  OFERTA: "Oferta",
+  VOTO: "Voto",
+  MISSOES: "Missões",
+  CONSTRUCAO: "Construção",
+  OUTRO: "Outro",
+};
+
+export const METODO_PAGAMENTO: Record<MetodoPagamento, string> = {
+  NUMERARIO: "Numerário",
+  TPA: "TPA",
+  TRANSFERENCIA: "Transferência",
+  MULTICAIXA_EXPRESS: "Multicaixa Express",
 };
 
 export const PAPEL: Record<Papel, string> = {

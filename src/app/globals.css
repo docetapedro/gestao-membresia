@@ -68,3 +68,23 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+
+/* Impressão: mostra apenas a área do recibo. */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .recibo,
+  .recibo * {
+    visibility: visible;
+  }
+  .recibo {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 24px;
+  }
+  .nao-imprimir {
+    display: none !important;
+  }
+}
