@@ -5,7 +5,16 @@ import type {
   EstadoMembro,
   FormaAdmissao,
   PapelFamiliar,
+  Papel,
 } from "@prisma/client";
+
+export const PAPEL: Record<Papel, string> = {
+  ADMIN: "Administrador",
+  PASTOR: "Pastor",
+  SECRETARIA: "Secretaria",
+  TESOURARIA: "Tesouraria",
+  LIDER_CELULA: "Líder de célula",
+};
 
 export const SEXO: Record<Sexo, string> = {
   MASCULINO: "Masculino",

@@ -1,6 +1,7 @@
 import { ZodError } from "zod";
 import { SemPermissaoError } from "@/lib/auth/permissoes";
 import { SemContextoTenantError } from "@/lib/tenant/context";
+import { ErroDeNegocio } from "./erros";
 
 /**
  * Contrato de resposta das Server Actions (spec secção 8).
@@ -33,6 +34,9 @@ export function falhaDeErro(e: unknown): Resultado<never> {
   }
   if (e instanceof SemContextoTenantError) {
     return { ok: false, erro: "Sessão inválida. Inicie sessão novamente." };
+  }
+  if (e instanceof ErroDeNegocio) {
+    return { ok: false, erro: e.message };
   }
   console.error("[acao] erro inesperado:", e);
   return { ok: false, erro: "Ocorreu um erro. Tente novamente." };
