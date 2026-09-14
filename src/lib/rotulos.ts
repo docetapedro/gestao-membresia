@@ -50,6 +50,17 @@ export const FORMA_ADMISSAO: Record<FormaAdmissao, string> = {
   RECONCILIACAO: "Reconciliação",
 };
 
+/** Dias da semana (0 = Domingo … 6 = Sábado), alinhados com Date.getDay(). */
+export const DIA_SEMANA: Record<number, string> = {
+  0: "Domingo",
+  1: "Segunda-feira",
+  2: "Terça-feira",
+  3: "Quarta-feira",
+  4: "Quinta-feira",
+  5: "Sexta-feira",
+  6: "Sábado",
+};
+
 export const PAPEL_FAMILIAR: Record<PapelFamiliar, string> = {
   CHEFE: "Chefe de família",
   CONJUGE: "Cônjuge",
