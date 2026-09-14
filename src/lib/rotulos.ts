@@ -5,8 +5,16 @@ import type {
   EstadoMembro,
   FormaAdmissao,
   PapelFamiliar,
+  TipoCulto,
   Papel,
 } from "@prisma/client";
+
+export const TIPO_CULTO: Record<TipoCulto, string> = {
+  DOMINGO_MANHA: "Domingo (manhã)",
+  ORACAO: "Culto de oração",
+  CELULA: "Célula",
+  ESPECIAL: "Especial",
+};
 
 export const PAPEL: Record<Papel, string> = {
   ADMIN: "Administrador",
