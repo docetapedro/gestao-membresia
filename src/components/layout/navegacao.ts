@@ -29,7 +29,7 @@ export const NAVEGACAO: ItemNav[] = [
   { href: "/ministerios", rotulo: "Departamentos", icone: HandHeart, recurso: "membros" },
   { href: "/presencas", rotulo: "Presenças", icone: CalendarCheck, recurso: "presencas" },
   { href: "/contribuicoes", rotulo: "Contribuições", icone: Wallet, recurso: "contribuicoes" },
-  { href: "/eventos", rotulo: "Eventos", icone: CalendarDays, recurso: "membros" },
+  { href: "/eventos", rotulo: "Eventos", icone: CalendarDays, recurso: "eventos" },
   { href: "/relatorios", rotulo: "Relatórios", icone: FileBarChart, recurso: "relatorios" },
   { href: "/definicoes", rotulo: "Definições", icone: Settings, recurso: "definicoes" },
 ];

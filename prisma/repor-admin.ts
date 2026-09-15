@@ -13,6 +13,15 @@ const ADMIN_EMAIL = "docetapedro@gmail.com";
 const ADMIN_SENHA = "Koinonia@2026";
 
 async function main() {
+  // Diagnóstico: a que base de dados nos ligámos?
+  const url = process.env.DATABASE_URL ?? "(DATABASE_URL não definido → usou .env)";
+  const motor = url.startsWith("postgres") ? "PostgreSQL (Neon?)" : url.startsWith("mysql") ? "MySQL (local?)" : "desconhecido";
+  const hostMasc = url.replace(/:\/\/[^@]*@/, "://***@").split("?")[0];
+  console.log(`→ BD alvo: ${motor}`);
+  console.log(`→ URL: ${hostMasc}`);
+  const totalUtil = await prisma.utilizador.count();
+  console.log(`→ Utilizadores existentes antes: ${totalUtil}`);
+
   let igreja = await prisma.igreja.findFirst();
   if (!igreja) {
     igreja = await prisma.igreja.create({

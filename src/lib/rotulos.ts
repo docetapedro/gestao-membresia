@@ -6,6 +6,7 @@ import type {
   FormaAdmissao,
   PapelFamiliar,
   TipoCulto,
+  TipoEvento,
   TipoContribuicao,
   MetodoPagamento,
   Papel,
@@ -16,6 +17,16 @@ export const TIPO_CULTO: Record<TipoCulto, string> = {
   ORACAO: "Culto de oração",
   CELULA: "Célula",
   ESPECIAL: "Especial",
+};
+
+export const TIPO_EVENTO: Record<TipoEvento, string> = {
+  CONFERENCIA: "Conferência",
+  RETIRO: "Retiro",
+  VIGILIA: "Vigília",
+  SEMINARIO: "Seminário",
+  EVANGELISMO: "Evangelismo",
+  CULTO_ESPECIAL: "Culto especial",
+  OUTRO: "Outro",
 };
 
 export const TIPO_CONTRIBUICAO: Record<TipoContribuicao, string> = {

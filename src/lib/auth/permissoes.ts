@@ -11,6 +11,7 @@ export type Recurso =
   | "membros"
   | "contribuicoes"
   | "presencas"
+  | "eventos"
   | "relatorios"
   | "relatorios_financeiros"
   | "definicoes";
@@ -25,6 +26,7 @@ const MATRIZ: Record<Papel, Record<Recurso, Nivel>> = {
     membros: "total",
     contribuicoes: "total",
     presencas: "total",
+    eventos: "total",
     relatorios: "total",
     relatorios_financeiros: "total",
     definicoes: "total",
@@ -33,6 +35,7 @@ const MATRIZ: Record<Papel, Record<Recurso, Nivel>> = {
     membros: "total",
     contribuicoes: "leitura",
     presencas: "total",
+    eventos: "total",
     relatorios: "total",
     relatorios_financeiros: "total",
     definicoes: "nenhum",
@@ -41,6 +44,7 @@ const MATRIZ: Record<Papel, Record<Recurso, Nivel>> = {
     membros: "total",
     contribuicoes: "nenhum",
     presencas: "total",
+    eventos: "total",
     relatorios: "total", // não-financeiros
     relatorios_financeiros: "nenhum",
     definicoes: "nenhum",
@@ -49,6 +53,7 @@ const MATRIZ: Record<Papel, Record<Recurso, Nivel>> = {
     membros: "leitura",
     contribuicoes: "total",
     presencas: "nenhum",
+    eventos: "leitura",
     relatorios: "nenhum",
     relatorios_financeiros: "total",
     definicoes: "nenhum",
@@ -57,6 +62,7 @@ const MATRIZ: Record<Papel, Record<Recurso, Nivel>> = {
     membros: "propria_celula",
     contribuicoes: "nenhum",
     presencas: "propria_celula",
+    eventos: "leitura",
     relatorios: "propria_celula",
     relatorios_financeiros: "nenhum",
     definicoes: "nenhum",

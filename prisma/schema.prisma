@@ -65,6 +65,16 @@ enum TipoCulto {
   ESPECIAL
 }
 
+enum TipoEvento {
+  CONFERENCIA
+  RETIRO
+  VIGILIA
+  SEMINARIO
+  EVANGELISMO
+  CULTO_ESPECIAL
+  OUTRO
+}
+
 enum TipoContribuicao {
   DIZIMO
   OFERTA
@@ -258,15 +268,19 @@ model Culto {
 model Presenca {
   id       String  @id @default(cuid())
   igrejaId String
-  cultoId  String
+  cultoId  String?
+  eventoId String?
   membroId String
   presente Boolean @default(true)
 
-  culto  Culto  @relation(fields: [cultoId], references: [id], onDelete: Cascade)
-  membro Membro @relation(fields: [membroId], references: [id])
+  culto  Culto?  @relation(fields: [cultoId], references: [id], onDelete: Cascade)
+  evento Evento? @relation(fields: [eventoId], references: [id], onDelete: Cascade)
+  membro Membro  @relation(fields: [membroId], references: [id])
 
   @@unique([igrejaId, cultoId, membroId])
+  @@unique([igrejaId, eventoId, membroId])
   @@index([igrejaId, membroId])
+  @@index([igrejaId, eventoId])
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -301,14 +315,37 @@ model Contribuicao {
 // Eventos
 // ─────────────────────────────────────────────────────────────
 
-model Evento {
-  id        String    @id @default(cuid())
+// Programação semanal fixa (horário recorrente de cultos/programas).
+model ProgramaSemanal {
+  id        String  @id @default(cuid())
   igrejaId  String
   nome      String
+  diaSemana Int // 0 = Domingo … 6 = Sábado (alinhado com Date.getDay())
+  hora      String? // "HH:mm"
+  local     String?
+  descricao String? @db.Text
+  activo    Boolean @default(true)
+  ordem     Int     @default(0)
+
+  criadoEm      DateTime @default(now())
+  actualizadoEm DateTime @updatedAt
+
+  @@index([igrejaId, diaSemana])
+}
+
+model Evento {
+  id        String     @id @default(cuid())
+  igrejaId  String
+  nome      String
+  tipo      TipoEvento @default(OUTRO)
   inicio    DateTime
   fim       DateTime?
   local     String?
-  descricao String?   @db.Text
+  descricao String?    @db.Text
+  presencas Presenca[]
+
+  criadoEm      DateTime @default(now())
+  actualizadoEm DateTime @updatedAt
 
   @@index([igrejaId, inicio])
 }
