@@ -269,12 +269,72 @@ export function DatePicker({
   );
 }
 
+const HORAS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, "0"));
+const MINUTOS = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, "0"));
+
+const classeSelectHora =
+  "h-10 rounded-md border border-input bg-background px-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
+
+/** Seletor de hora em formato 24h (não depende do locale do browser). */
+export function SeletorHora24({
+  value,
+  onChange,
+  disabled,
+  id,
+}: {
+  value?: string; // "HH:mm"
+  onChange: (valor: string) => void;
+  disabled?: boolean;
+  id?: string;
+}) {
+  const [hh = "", mm = ""] = (value ?? "").split(":");
+
+  return (
+    <div className="flex items-center gap-1">
+      <select
+        id={id}
+        aria-label="Horas"
+        value={HORAS.includes(hh) ? hh : ""}
+        onChange={(e) => onChange(`${e.target.value}:${MINUTOS.includes(mm) ? mm : "00"}`)}
+        disabled={disabled}
+        className={cn(classeSelectHora, "w-[4.25rem]")}
+      >
+        <option value="" disabled>
+          hh
+        </option>
+        {HORAS.map((h) => (
+          <option key={h} value={h}>
+            {h}
+          </option>
+        ))}
+      </select>
+      <span className="text-muted-foreground">:</span>
+      <select
+        aria-label="Minutos"
+        value={MINUTOS.includes(mm) ? mm : ""}
+        onChange={(e) => onChange(`${HORAS.includes(hh) ? hh : "09"}:${e.target.value}`)}
+        disabled={disabled}
+        className={cn(classeSelectHora, "w-[4.25rem]")}
+      >
+        <option value="" disabled>
+          mm
+        </option>
+        {MINUTOS.map((m) => (
+          <option key={m} value={m}>
+            {m}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
 interface DateTimePickerProps extends Omit<DatePickerProps, "value" | "onChange"> {
   value?: string; // "yyyy-MM-ddTHH:mm"
   onChange: (valor: string) => void;
 }
 
-/** Data + hora. Combina o DatePicker com um campo de hora nativo. */
+/** Data + hora (24h). Combina o DatePicker com o seletor de hora 24h. */
 export function DateTimePicker({ value, onChange, ...rest }: DateTimePickerProps) {
   const [dataParte = "", horaParte = ""] = (value ?? "").split("T");
 
@@ -294,13 +354,7 @@ export function DateTimePicker({ value, onChange, ...rest }: DateTimePickerProps
   return (
     <div className="flex gap-2">
       <DatePicker {...rest} value={dataParte} onChange={mudarData} className="flex-1" />
-      <input
-        type="time"
-        value={horaParte}
-        onChange={(e) => mudarHora(e.target.value)}
-        disabled={rest.disabled}
-        className="h-10 w-[7.5rem] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-      />
+      <SeletorHora24 value={horaParte} onChange={mudarHora} disabled={rest.disabled} />
     </div>
   );
 }

@@ -67,16 +67,6 @@ export default async function PainelPage() {
           />
         ) : null}
       </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Bem-vindo, {ctx.nome.split(" ")[0]}</CardTitle>
-        </CardHeader>
-        <CardContent className="text-sm text-muted-foreground">
-          A Fase 1 está a ser construída módulo a módulo. O módulo de{" "}
-          <strong>Membros</strong> é o próximo a ficar disponível.
-        </CardContent>
-      </Card>
     </div>
   );
 }

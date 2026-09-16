@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { SelectNativo } from "@/components/ui/select-nativo";
+import { SeletorHora24 } from "@/components/ui/date-picker";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -70,6 +71,7 @@ export function FormularioCelula({ modo, id, membros, inicial }: Props) {
 
   const {
     register,
+    control,
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
@@ -151,7 +153,13 @@ export function FormularioCelula({ modo, id, membros, inicial }: Props) {
             </SelectNativo>
           </Campo>
           <Campo label="Hora" htmlFor="hora">
-            <Input id="hora" type="time" {...register("hora")} />
+            <Controller
+              control={control}
+              name="hora"
+              render={({ field }) => (
+                <SeletorHora24 id="hora" value={field.value ?? ""} onChange={field.onChange} />
+              )}
+            />
           </Campo>
           <Campo label="Endereço" htmlFor="endereco" className="sm:col-span-2">
             <Textarea id="endereco" rows={2} {...register("endereco")} />

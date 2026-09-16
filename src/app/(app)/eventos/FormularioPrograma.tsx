@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
@@ -18,6 +18,7 @@ import type { ItemProgramaSemanal } from "@/services/eventos.service";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SelectNativo } from "@/components/ui/select-nativo";
+import { SeletorHora24 } from "@/components/ui/date-picker";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -70,6 +71,7 @@ export function FormularioPrograma({ modo, item, aoTerminar }: Props) {
 
   const {
     register,
+    control,
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
@@ -130,7 +132,13 @@ export function FormularioPrograma({ modo, item, aoTerminar }: Props) {
             </SelectNativo>
           </Campo>
           <Campo label="Hora" htmlFor="hora" erro={errors.hora?.message}>
-            <Input id="hora" type="time" {...register("hora")} />
+            <Controller
+              control={control}
+              name="hora"
+              render={({ field }) => (
+                <SeletorHora24 id="hora" value={field.value ?? ""} onChange={field.onChange} />
+              )}
+            />
           </Campo>
           <Campo label="Local" htmlFor="local">
             <Input id="local" {...register("local")} />
